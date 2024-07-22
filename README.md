@@ -19,8 +19,8 @@ Segue o relacionamento das tabelas:
 
 Foi utilizado a arquitetura medalhão onde cada camada é reponsável por:
 1. Bronze: replicar dados da raw mantendo todo o histórico das ingestões
-2. Silver: limpar, organizar e criar recursos que serão utilizados pelo negócio;
-3. Gold: organizar os dados de forma eficiente e consistente para consumo das áreas. Muitas veses se faz o uso do modelo dimensional (star-schema)
+2. Silver: limpar, organizar e criar recursos que serão utilizados pelo negócio
+3. Gold: organizar os dados de forma eficiente e consistente para consumo das áreas. Muitas veses faz-se o uso do modelo dimensional (star-schema)
 
 ----
 
@@ -29,7 +29,7 @@ Foi utilizado a arquitetura medalhão onde cada camada é reponsável por:
 Nessa camada cada uma das quatro fontes de dados foram:
 1. Lidas da camada raw
 2. Nome das colunas foram renomeados seguindo o padrão de desenvolvimento do time
-3. Criação de coluna "TT_INGESTION" que armazena a data e hora da ingestão. Será usado para particionamento, deduplicação e SCD (se necessário)
+3. Criação de coluna "TT_INGESTION" que armazena a data e hora da ingestão. Será usado para particionamento, deduplicação e SCD (quando necessário)
 4. Persistidas na camada bronze no formato delta
 
 Para os dados de "orders" e "order_details" realizei o particionamento por ano e mês prevendo o alto volume de dados
@@ -45,7 +45,7 @@ Arquivos da bronze disponíveis em
 Para cada uma das fontes foi feito:
 1. Leitura da bronze de forma incremental, ou seja, buscando somente os novos registros com base em "TT_INGESTION"
 2. Tratamento e limpeza: correção de tipagem, formatação de strings, ...
-3. Persistência na silver
+3. Persistência na silver em formato delta
 
 Para os dados de "orders" e "order_details" foi replicado o particionamento da bronze
 
@@ -82,5 +82,10 @@ Arquivos da gold que implementam a lógica acima disponíveis em
 
 ## Orquestração dos jobs
 
-Os notebooks foram orquestrados via Databricks na sguinte estrutura
+Os notebooks foram orquestrados via Databricks na seguinte estrutura:
 ![image](https://github.com/user-attachments/assets/fe46acce-c6fa-450d-828b-54d8679224fd)
+
+1. A primeira parte (quadrante cinza) realiza a carga da raw até a silver
+2. Na parte dois (quadrante amarelo) é onde as fatos e dimensões são alimentadas
+3. Na parte final (quadrante azul) é executado algumas consultas de validação (preço <= 0, quantidade <= 0, mais de uma versão ativa em dm_pizza, ...) visando garantir a integridade dos dados
+
