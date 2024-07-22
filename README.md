@@ -34,7 +34,7 @@ Nessa camada cada uma das quatro fontes de dados foram:
 
 Para os dados de "orders" e "order_details" realizei o particionamento por ano e mês prevendo o alto volume de dados
 
-Arquivos da bronze disponíveis em
+Arquivos da bronze disponíveis em https://github.com/matheusfc77/Pizzas-Extraction/tree/main/raw_to_bronze
 
 ![image](https://github.com/user-attachments/assets/e69b9de3-8f99-43b2-9329-06ea89b2e828)
 
@@ -49,7 +49,7 @@ Para cada uma das fontes foi feito:
 
 Para os dados de "orders" e "order_details" foi replicado o particionamento da bronze
 
-Arquivos da silver disponíveis em 
+Arquivos da silver disponíveis em https://github.com/matheusfc77/Pizzas-Extraction/tree/main/bronze_to_silver
 
 ![image](https://github.com/user-attachments/assets/fd531c78-2ffc-4cf6-aa8c-c6018d946a38)
 
@@ -75,7 +75,7 @@ Com base nos requisitos levantados desenhou-se a seguinte solução:
 5. FT_VENDAS: transações de vendas ao nível de item
 6. FT_ESTOQUE: contém fotos do volume dos ingredientes gastos a cada dia
 
-Arquivos da gold que implementam a lógica acima disponíveis em 
+Arquivos da gold que implementam a lógica acima disponíveis em https://github.com/matheusfc77/Pizzas-Extraction/tree/main/silver_to_gold
 
 ----
 ----
