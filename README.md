@@ -56,3 +56,31 @@ Arquivos da silver disponíveis em
 ----
 
 ### Gold
+
+Para esta camada foi visto com a área de negócio que:
+1. O principal objetivo é acompanhar o volume de venda das pizzas ao longo do tempo e comparar com os anos anteriores
+2. Algumas pizzas são alteradas buscando aprimoramento da receita e, em alguns casos, a categoria da pizza é modificada. Essa alteração precisa ser capturada sem comprometer o histórico das vendas, sendo possível comparar as vendas das diferentes versões
+3. Na fonte "pizza_types" é listado os ingredientes de cada pizza. Utilizar essa informação para mensurar a matéria prima usada diariamente
+
+Segue os processos e dimensões identificados (bus matrix):
+![image](https://github.com/user-attachments/assets/a77cc952-2d18-4b30-867d-87916dee4f25)
+
+Com base nos requisitos levantados desenhou-se a seguinte solução:
+![image](https://github.com/user-attachments/assets/51b81efe-78be-4353-9322-aafd42d58c12)
+
+1. DM_DATA: dimensão de tempo que possibilitará as análises temporais das vendas e consumo de ingredientes
+2. DM_PIZZAS: dados das pizzas (nome, categoria, tamanhos, ...). Implementa a [técnica 2 de SCD](https://www.sqlshack.com/implementing-slowly-changing-dimensions-scds-in-data-warehouses/) para manter o histórico das diferentes categorias (atende ao reuisito 2)
+3. DM_INGREDIENTES: lista de ingredientes das pizzas
+4. BD_PIZZAS_INGREDIENTES: tabela bridge entre ingredientes e pizzas (usa CD_DURABLE_PIZZAS ao invés de CD_PIZZAS pois esta última sofre alterações devido a SCD)
+5. FT_VENDAS: transações de vendas ao nível de item
+6. FT_ESTOQUE: contém fotos do volume dos ingredientes gastos a cada dia
+
+Arquivos da gold que implementam a lógica acima disponíveis em 
+
+----
+----
+
+## Orquestração dos jobs
+
+Os notebooks foram orquestrados via Databricks na sguinte estrutura
+![image](https://github.com/user-attachments/assets/fe46acce-c6fa-450d-828b-54d8679224fd)
