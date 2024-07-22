@@ -89,3 +89,6 @@ Os notebooks foram orquestrados via Databricks na seguinte estrutura:
 2. Na parte dois (quadrante amarelo) é onde as fatos e dimensões são alimentadas
 3. Na parte final (quadrante azul) é executado algumas consultas de validação (preço <= 0, quantidade <= 0, mais de uma versão ativa em dm_pizza, ...) visando garantir a integridade dos dados
 
+----
+
+Link com o vídeo explicando o projeto: https://drive.google.com/file/d/1gt-HxZMsJ-YeFlXBXFFzFU376JDuxUt7/view?usp=sharing
