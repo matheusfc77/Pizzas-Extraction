@@ -57,12 +57,34 @@ df_pizza_scd.createOrReplaceTempView('pizza_scd')
 
 # COMMAND ----------
 
-(
-    df_pizza_scd
-        .write.format("delta")
-        .mode("append")
-        .saveAsTable("studies.gold.dm_pizza")
-)
+# MAGIC %sql
+# MAGIC MERGE INTO studies.gold.dm_pizza
+# MAGIC USING pizza_scd
+# MAGIC   ON studies.gold.dm_pizza.CD_SOURCE_PIZZA_CODE = pizza_scd.CD_SOURCE_PIZZA_CODE
+# MAGIC  AND studies.gold.dm_pizza.CT_PIZZA_CATEGORY = pizza_scd.CT_PIZZA_CATEGORY
+# MAGIC WHEN NOT MATCHED THEN
+# MAGIC INSERT (
+# MAGIC   CD_PIZZA,
+# MAGIC   CD_DURABLE_PIZZA,
+# MAGIC   CD_SOURCE_PIZZA_CODE,
+# MAGIC   CT_SIZE,
+# MAGIC   NM_PIZZA_NAME,
+# MAGIC   CT_PIZZA_CATEGORY,
+# MAGIC   DT_EFFECTIVE_DATE,
+# MAGIC   EXPIRATION_DATE,
+# MAGIC   CURRENT_INDICATOR
+# MAGIC )
+# MAGIC VALUES (
+# MAGIC   pizza_scd.CD_PIZZA,
+# MAGIC   pizza_scd.CD_DURABLE_PIZZA,
+# MAGIC   pizza_scd.CD_SOURCE_PIZZA_CODE,
+# MAGIC   pizza_scd.CT_SIZE,
+# MAGIC   pizza_scd.NM_PIZZA_NAME,
+# MAGIC   pizza_scd.CT_PIZZA_CATEGORY,
+# MAGIC   pizza_scd.DT_EFFECTIVE_DATE,
+# MAGIC   pizza_scd.EXPIRATION_DATE,
+# MAGIC   pizza_scd.CURRENT_INDICATOR
+# MAGIC )     
 
 # COMMAND ----------
 
